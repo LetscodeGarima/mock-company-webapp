@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh './gradlew assemble'  // Build command
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh './gradlew test'  // Test command
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/build/test-results/test/*.xml'
+        }
+        success {
+            echo 'Build and tests passed!'
+        }
+        failure {
+            echo 'Build or tests failed!'
+        }
+    }
+}
